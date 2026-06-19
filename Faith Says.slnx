@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Faith Says/Faith Says.vcxproj" />
+  <Project Path="Faith Says/Faith Says.vcxproj" Id="b58964a6-2062-4449-bfa6-e86d7589a7b5" />
 </Solution>

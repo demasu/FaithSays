@@ -24,6 +24,9 @@
     <ClInclude Include="InputHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -52,28 +55,31 @@
     <Image Include="sprites\faith_paw_right.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="button_mouth_left.png">
+    <Image Include="cursor.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="button_mouth_right.png">
+    <Image Include="button_mouth_left_new.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="button_paw_left.png">
+    <Image Include="button_mouth_left_new_pressed.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="button_paw_right.png">
+    <Image Include="button_mouth_right_new.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="button_mouth_left_pressed.png">
+    <Image Include="button_mouth_right_new_pressed.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="button_mouth_right_pressed.png">
+    <Image Include="button_paw_left_new.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="button_paw_left_pressed.png">
+    <Image Include="button_paw_left_new_pressed.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="button_paw_right_pressed.png">
+    <Image Include="button_paw_right_new.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="button_paw_right_new_pressed.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

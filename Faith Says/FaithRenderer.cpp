@@ -1,7 +1,7 @@
 #include "FaithRenderer.h"
+#include <array>
 
-FaithRenderer::FaithRenderer(FaithState initialState) : currentState(initialState), animationTimer(0.0f), animationDuration(0.5f)
-{
+FaithRenderer::FaithRenderer(FaithState initialState) : currentState(initialState), animationTimer(0.0f), animationDuration(0.5f) {
 }
 
 void FaithRenderer::LoadFaithSprites() {
@@ -20,10 +20,10 @@ void FaithRenderer::TriggerAnimation(FaithState actionState, float duration) {
 }
 
 void FaithRenderer::Update(float fElapsedTime) {
-	if (currentState != NONE) {
+	if (currentState != FaithState::NONE) {
 		animationTimer += fElapsedTime;
 		if (animationTimer >= animationDuration) {
-			currentState = NONE; // Reset to default state after animation duration
+			currentState = FaithState::NONE; // Reset to default state after animation duration
 			animationTimer = 0.0f;
 		}
 	}
@@ -74,14 +74,15 @@ void FaithRenderer::DrawFaith(olc::PixelGameEngine* pge)
 }
 
 void FaithRenderer::LoadUISprites() {
-	uiInputLeft = std::make_unique<olc::Sprite>("button_mouth_left.png");
-	uiInputRight = std::make_unique<olc::Sprite>("button_mouth_right.png");
-	uiInputUp = std::make_unique<olc::Sprite>("button_paw_left.png");
-	uiInputDown = std::make_unique<olc::Sprite>("button_paw_right.png");
-	uiInputLeftPressed = std::make_unique<olc::Sprite>("button_mouth_left_pressed.png");
-	uiInputRightPressed = std::make_unique<olc::Sprite>("button_mouth_right_pressed.png");
-	uiInputUpPressed = std::make_unique<olc::Sprite>("button_paw_left_pressed.png");
-	uiInputDownPressed = std::make_unique<olc::Sprite>("button_paw_right_pressed.png");
+	uiInputLeft = std::make_unique<olc::Sprite>("button_mouth_left_new.png");
+	uiInputRight = std::make_unique<olc::Sprite>("button_mouth_right_new.png");
+	uiInputUp = std::make_unique<olc::Sprite>("button_paw_left_new.png");
+	uiInputDown = std::make_unique<olc::Sprite>("button_paw_right_new.png");
+	uiInputLeftPressed = std::make_unique<olc::Sprite>("button_mouth_left_new_pressed.png");
+	uiInputRightPressed = std::make_unique<olc::Sprite>("button_mouth_right_new_pressed.png");
+	uiInputUpPressed = std::make_unique<olc::Sprite>("button_paw_left_new_pressed.png");
+	uiInputDownPressed = std::make_unique<olc::Sprite>("button_paw_right_new_pressed.png");
+	uiMenuCursor = std::make_unique<olc::Sprite>("cursor.png");
 }
 
 void FaithRenderer::DrawUI(olc::PixelGameEngine* pge)
@@ -92,16 +93,10 @@ void FaithRenderer::DrawUI(olc::PixelGameEngine* pge)
 	int buttonCenterHorizontal = pge->ScreenWidth() / 2;
 	int buttonCenterVertical = pge->ScreenHeight() - uiSpriteSize - 50;
 	olc::vi2d buttonCenter(buttonCenterHorizontal, buttonCenterVertical);
-	olc::vi2d buttonInputUpPos(buttonCenterHorizontal - uiSpriteSize, buttonCenterVertical - uiSpriteSize);
-	olc::vi2d buttonInputDownPos(buttonCenterHorizontal, buttonCenterVertical - uiSpriteSize);
-	olc::vi2d buttonInputLeftPos(buttonCenterHorizontal - uiSpriteSize, buttonCenterVertical);
-	olc::vi2d buttonInputRightPos(buttonCenterHorizontal, buttonCenterVertical);
-
-	// Text labels
-	olc::vi2d upInputLabelPos   (buttonCenterHorizontal - (uiSpriteSize * 2) - 20, buttonCenterVertical - uiSpriteHalfSize);
-	olc::vi2d downInputLabelPos (buttonCenterHorizontal + (uiSpriteSize) + 10,     buttonCenterVertical - uiSpriteHalfSize);
-	olc::vi2d leftInputLabelPos (buttonCenterHorizontal - (uiSpriteSize * 2) - 20, buttonCenterVertical + uiSpriteHalfSize);
-	olc::vi2d rightInputLabelPos(buttonCenterHorizontal + (uiSpriteSize) + 10,     buttonCenterVertical + uiSpriteHalfSize);
+	olc::vi2d buttonInputUpPos(buttonCenterHorizontal - uiSpriteHalfSize, buttonCenterVertical - uiSpriteSize);
+	olc::vi2d buttonInputDownPos(buttonCenterHorizontal - uiSpriteHalfSize, buttonCenterVertical + uiSpriteHalfSize);
+	olc::vi2d buttonInputLeftPos(buttonCenterHorizontal - uiSpriteSize, buttonCenterVertical - uiSpriteHalfSize);
+	olc::vi2d buttonInputRightPos(buttonCenterHorizontal + uiSpriteHalfSize, buttonCenterVertical - uiSpriteHalfSize);
 
 	// Draw sprites
 	pge->SetPixelMode(olc::Pixel::MASK);
@@ -144,8 +139,59 @@ void FaithRenderer::DrawUI(olc::PixelGameEngine* pge)
 	pge->SetPixelMode(olc::Pixel::NORMAL);
 
 	// Draw labels
-	pge->DrawString(upInputLabelPos, "Walk left");
-	pge->DrawString(downInputLabelPos, "Walk right");
-	pge->DrawString(leftInputLabelPos, "Meow left");
-	pge->DrawString(rightInputLabelPos, "Meow right");
+	DrawStringCentered(pge, buttonInputUpPos.y - 15, "Walk Left");
+	DrawStringCentered(pge, buttonInputDownPos.y + uiSpriteHalfSize + 10, "Walk Right");
+
+	// For left and right the string length * 8 will give the width in pixels
+	// of the text
+	pge->DrawString({ buttonInputLeftPos.x - 16 - 72, buttonInputLeftPos.y + uiSpriteHalfSize}, "Meow Left");
+	pge->DrawString({ buttonInputRightPos.x + 16 + 32, buttonInputRightPos.y + uiSpriteHalfSize }, "Meow Right");
+}
+
+void FaithRenderer::DrawMenu(olc::PixelGameEngine* pge, MenuItem highlightedMenuItem, float totalElapsedTime) {
+	int screenWidth = pge->ScreenWidth();
+	int screenHeight = pge->ScreenHeight();
+	olc::vi2d screenCenter = { (screenWidth / 2), (screenHeight / 2) };
+
+	//******************************************************************
+	//* The menu is split up into two sections. Title in the top third *
+	//* with the rest of the options set up in the bottom two thirds   *
+	//* of the screen                                                  *
+	//******************************************************************
+	int titleLimit = screenHeight / 3;
+	int menuTopLimit = titleLimit;
+	unsigned int titleScale = 6;
+	unsigned int  textScale = 4;
+	int textHeight = 8 * textScale;
+	int spacingGap = 30;
+	int cursorSize = 32;
+	int cursorGap = 8;
+
+	DrawStringCentered(pge, (titleLimit / 2) - 8, "FAITH SAYS", olc::WHITE, titleScale);
+
+	std::vector<std::string> menuItems = { "PLAY", "CREDITS", "QUIT" };
+	int menuStart = menuTopLimit + (screenHeight - menuTopLimit - (spacingGap * 5) - (textHeight * menuItems.size()));
+
+	for (int i = 0; i < menuItems.size(); i++) {
+		int menuItemYPos = menuStart + (i * (textHeight + spacingGap));
+		int menuItemXPos = (screenWidth - (menuItems[i].length() * 8 * textScale)) / 2;
+		pge->DrawString(menuItemXPos, menuItemYPos, menuItems[i], olc::WHITE, textScale);
+
+		// Check if we need to draw the cursor
+		if (static_cast<size_t>(highlightedMenuItem) == i) {
+			float bounceOffset = std::sin(totalElapsedTime * 5.0f) * 4.0f;
+			int cursorXPos = menuItemXPos - cursorSize - cursorGap + (int)bounceOffset;
+			int cursorYPos = menuItemYPos + ((textHeight - cursorSize) / 2);
+			pge->DrawSprite(cursorXPos, cursorYPos, uiMenuCursor.get());
+		}
+	}
+}
+
+void FaithRenderer::DrawCreditsScreen(olc::PixelGameEngine* pge) {
+
+}
+
+void FaithRenderer::DrawStringCentered(olc::PixelGameEngine* pge, int y, const std::string& text, olc::Pixel color, uint32_t scale) {
+	int x = (pge->ScreenWidth() - (text.length() * 8 * scale)) / 2;
+	pge->DrawString(x, y, text, color, scale);
 }

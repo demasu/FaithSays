@@ -1,17 +1,27 @@
 #pragma once
 #include "olcPixelGameEngine.h"
+#include "InputHandler.h"
+#include "Types.h"
 
-class FaithRenderer
-{
+class FaithRenderer {
 public:
-	// Public variables
-	enum FaithState {
-		NONE,
-		MOUTH_LEFT,
-		MOUTH_RIGHT,
-		PAW_LEFT,
-		PAW_RIGHT
-	};
+	//******************************************
+	//* Functions for rendering the main Faith *
+	//******************************************
+	FaithRenderer(FaithState initialState = FaithState::NONE);
+
+	void LoadFaithSprites();
+	void Update(float fElapsedTime);
+	void TriggerAnimation(FaithState newState, float duration = 0.5f);
+	void DrawFaith(olc::PixelGameEngine* pge);
+
+	//**********************************
+	//* Functions for rendering the UI *
+	//**********************************
+	void LoadUISprites();
+	void DrawUI(olc::PixelGameEngine* pge);
+	void DrawMenu(olc::PixelGameEngine* pge, MenuItem highlightedMenuItem, float totalElapsedTime);
+	void DrawCreditsScreen(olc::PixelGameEngine* pge);
 
 private:
 	//*********************************************
@@ -42,22 +52,12 @@ private:
 	std::unique_ptr<olc::Sprite> uiInputRightPressed;
 	std::unique_ptr<olc::Sprite> uiInputUpPressed;
 	std::unique_ptr<olc::Sprite> uiInputDownPressed;
+	std::unique_ptr<olc::Sprite> uiMenuCursor;
 
-public:
-	//******************************************
-	//* Functions for rendering the main Faith *
-	//******************************************
-	FaithRenderer(FaithState initialState = FaithState::NONE);
+	//*****************************
+	//* Internal helper functions *
+	//*****************************
 
-	void LoadFaithSprites();
-	void Update(float fElapsedTime);
-	void TriggerAnimation(FaithState newState, float duration = 0.5f);
-	void DrawFaith(olc::PixelGameEngine* pge);
-
-	//**********************************
-	//* Functions for rendering the UI *
-	//**********************************
-	void LoadUISprites();
-	void DrawUI(olc::PixelGameEngine* pge);
+	void DrawStringCentered(olc::PixelGameEngine* pge, int y, const std::string& text, olc::Pixel color = olc::WHITE, uint32_t scale = 1);
 };
 

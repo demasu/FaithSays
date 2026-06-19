@@ -1,12 +1,27 @@
 #pragma once
 #include "olcPixelGameEngine.h"
-#include "FaithRenderer.h"
+#include "Types.h"
 
 class InputHandler
 {
 public:
 	InputHandler();
 
-	FaithRenderer::FaithState HandleInput(olc::PixelGameEngine* pge);
+	void Update(olc::PixelGameEngine* pge, GameState& currentState, MenuItem& highlightedMenuItem);
+	MenuAction GetMenuAction() const { return currentMenuAction; };
+	FaithState GetFaithAction() const { return currentFaithAction; };
+	FaithState HandlePlayingInput(olc::PixelGameEngine* pge);
+	MenuAction HandleMenuInput(olc::PixelGameEngine* pge);
+
+	bool LeftPressed(olc::PixelGameEngine* pge);
+	bool UpPressed(olc::PixelGameEngine* pge);
+	bool RightPressed(olc::PixelGameEngine* pge);
+	bool DownPressed(olc::PixelGameEngine* pge);
+	bool SelectPressed(olc::PixelGameEngine* pge);
+
+private:
+	MenuAction currentMenuAction = MenuAction::NONE;
+	FaithState currentFaithAction = FaithState::NONE;
+
 };
 
