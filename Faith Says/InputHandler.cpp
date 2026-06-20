@@ -58,9 +58,10 @@ MenuAction InputHandler::HandleMenuInput(olc::PixelGameEngine* pge) {
 
 void InputHandler::HandleCreditsInput(olc::PixelGameEngine* pge, GameState& currentGameState) {
 	bool SELECT_PRESSED = SelectPressed(pge);
+	bool ESCAPE_PRESSED = EscapePressed(pge);
 
 	// Only end the credits when the user hits the select button
-	if (SELECT_PRESSED) {
+	if (SELECT_PRESSED || ESCAPE_PRESSED) {
 		currentGameState = GameState::MAIN_MENU;
 	}
 }
