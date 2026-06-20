@@ -148,7 +148,7 @@ void FaithRenderer::DrawUI(olc::PixelGameEngine* pge)
 	pge->DrawString({ buttonInputRightPos.x + 16 + 32, buttonInputRightPos.y + uiSpriteHalfSize }, "Meow Right");
 }
 
-void FaithRenderer::DrawMenu(olc::PixelGameEngine* pge, MenuItem highlightedMenuItem, float totalElapsedTime) {
+void FaithRenderer::DrawMenu(olc::PixelGameEngine* pge, MainMenuItem highlightedMenuItem, int highScore, float totalElapsedTime) {
 	int screenWidth = pge->ScreenWidth();
 	int screenHeight = pge->ScreenHeight();
 	olc::vi2d screenCenter = { (screenWidth / 2), (screenHeight / 2) };
@@ -185,13 +185,106 @@ void FaithRenderer::DrawMenu(olc::PixelGameEngine* pge, MenuItem highlightedMenu
 			pge->DrawSprite(cursorXPos, cursorYPos, uiMenuCursor.get());
 		}
 	}
+
+
+	DrawHighScoreMainMenu(pge, highScore);
 }
 
 void FaithRenderer::DrawCreditsScreen(olc::PixelGameEngine* pge) {
+	std::string mainDev = "Jossie \"Demasu\" Brandt";
+	std::string foxPartner = "Kit";
+	std::string catPartner = "Larch";
+	int titleScale = 9;
+	int roleScale = 3;
+	int regularScale = 2;
+	int minorSpacing = 8;
+	int majorSpacing = 30;
 
+	int creditsTitlePos = 50;
+	int mainCreditsStartPos = creditsTitlePos + (titleScale * 8) + majorSpacing;
+	int mainDevNamePos      = mainCreditsStartPos + (roleScale * 8) + minorSpacing;
+	int foxSupportOnePos = mainDevNamePos + (regularScale * 8) + majorSpacing;
+	int foxSupportTwoPos = foxSupportOnePos + (roleScale * 8) + minorSpacing;
+	int foxSupportNamePos = foxSupportTwoPos + (roleScale * 8) + minorSpacing;
+	int catSupportOnePos = foxSupportNamePos + (regularScale * 8) + majorSpacing;
+	int catSupportTwoPos = catSupportOnePos + (roleScale * 8) + minorSpacing;
+	int catSupportThreePos = catSupportTwoPos + (roleScale * 8) + minorSpacing;
+	int catSupportNamePos = catSupportThreePos + (roleScale * 8) + minorSpacing;
+
+	olc::Pixel foxOrange(255, 153, 0);
+	olc::Pixel seafoamGreen(159, 226, 191);
+
+	DrawStringCentered(pge, 50, "CREDITS", olc::WHITE, titleScale);
+
+	DrawStringCentered(pge, mainCreditsStartPos, "MAIN DEV", olc::DARK_MAGENTA, roleScale);
+	DrawStringCentered(pge, mainDevNamePos, mainDev, olc::DARK_MAGENTA, regularScale);
+	
+	DrawStringCentered(pge, foxSupportOnePos, "EMOTIONAL SUPPORT FOX", foxOrange, roleScale);
+	DrawStringCentered(pge, foxSupportTwoPos, "& AMAZING PARTNER", foxOrange, roleScale);
+	DrawStringCentered(pge, foxSupportNamePos, foxPartner, foxOrange, regularScale);
+	
+	DrawStringCentered(pge, catSupportOnePos, "BEST LAP KITTY", seafoamGreen, roleScale);
+	DrawStringCentered(pge, catSupportTwoPos, "& INCREDIBLE", seafoamGreen, roleScale);
+	DrawStringCentered(pge, catSupportThreePos, "GIRLFRIEND", seafoamGreen, roleScale);
+	DrawStringCentered(pge, catSupportNamePos, catPartner, seafoamGreen, regularScale);
+
+}
+
+void FaithRenderer::DrawGameOverScreen(olc::PixelGameEngine* pge) {
+	int mainScale = 8;
+	int regularScale = 2;
+	int textDefaultHeight = 8;
+	int mainTextSize = textDefaultHeight * mainScale;
+	int regularTextSize = textDefaultHeight * regularScale;
+
+	int gameOverStart = 50;
+	int majorSpacing = textDefaultHeight * 2;
+	int minorSpacing = textDefaultHeight;
+
+	int instructionsStart = pge->ScreenHeight() / 2;
+
+
+	DrawStringCentered(pge, gameOverStart, "GAME", olc::WHITE, mainScale);
+	DrawStringCentered(pge, gameOverStart + mainTextSize + minorSpacing, "OVER", olc::WHITE, mainScale);
+	DrawStringCentered(pge, instructionsStart, "To return to the main", olc::WHITE, regularScale);
+	DrawStringCentered(pge, instructionsStart + regularTextSize + minorSpacing, "menu press ENTER", olc::WHITE, regularScale);
+	DrawStringCentered(pge, instructionsStart + regularTextSize + minorSpacing + regularTextSize + majorSpacing, "To quit press ESCAPE", olc::WHITE, regularScale);
 }
 
 void FaithRenderer::DrawStringCentered(olc::PixelGameEngine* pge, int y, const std::string& text, olc::Pixel color, uint32_t scale) {
 	int x = (pge->ScreenWidth() - (text.length() * 8 * scale)) / 2;
 	pge->DrawString(x, y, text, color, scale);
+}
+
+void FaithRenderer::Reset() {
+	currentState = FaithState::NONE;
+	animationTimer = 0.0f;
+}
+
+void FaithRenderer::DrawHighScore(olc::PixelGameEngine* pge, int highScore) {
+	int scale = 2;
+	int spacing = 8;
+	std::string highScoreString = std::to_string(highScore);
+	olc::vi2d highScoreTitlePos(2, 2);
+	olc::vi2d highScorePos(2, highScoreTitlePos.y + (8 * scale) + spacing);
+
+	pge->DrawString(highScoreTitlePos, "HIGH SCORE:", olc::WHITE, scale);
+	pge->DrawString(highScorePos, highScoreString, olc::WHITE, scale);
+}
+
+void FaithRenderer::DrawHighScoreMainMenu(olc::PixelGameEngine* pge, int highScore) {
+	int scale = 2;
+	int scoreStart = pge->ScreenHeight() - (scale * 8) - 8;
+	DrawStringCentered(pge, scoreStart, "High Score: " + std::to_string(highScore), olc::WHITE, scale);
+}
+
+void FaithRenderer::DrawScore(olc::PixelGameEngine* pge, int currentScore) {
+	int spacing = 8;
+	int scale = 2;
+	std::string scoreString = std::to_string(currentScore);
+	olc::vi2d scoreTitlePos(pge->ScreenWidth() - (6*8*scale), 2);
+	olc::vi2d scorePos(pge->ScreenWidth() - (scoreString.length() * 8 * scale + 8), scoreTitlePos.y + 8 + spacing);
+
+	pge->DrawString(scoreTitlePos, "SCORE:", olc::WHITE, scale);
+	pge->DrawString(scorePos, scoreString, olc::WHITE, scale);
 }

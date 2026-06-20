@@ -56,7 +56,29 @@ MenuAction InputHandler::HandleMenuInput(olc::PixelGameEngine* pge) {
 	return MenuAction::NONE;
 }
 
-void InputHandler::Update(olc::PixelGameEngine* pge, GameState& currentState, MenuItem& highlightedMenuItem) {
+void InputHandler::HandleCreditsInput(olc::PixelGameEngine* pge, GameState& currentGameState) {
+	bool SELECT_PRESSED = SelectPressed(pge);
+
+	// Only end the credits when the user hits the select button
+	if (SELECT_PRESSED) {
+		currentGameState = GameState::MAIN_MENU;
+	}
+}
+
+void InputHandler::HandleGameOverInput(olc::PixelGameEngine* pge, GameState& currentGameState) {
+	bool SELECT_PRESSED = SelectPressed(pge);
+	bool ESCAPE_PRESSED = EscapePressed(pge);
+
+	if (SELECT_PRESSED) {
+		currentGameState = GameState::MAIN_MENU;
+	}
+
+	if (ESCAPE_PRESSED) {
+		currentGameState = GameState::QUITTING;
+	}
+}
+
+void InputHandler::Update(olc::PixelGameEngine* pge, GameState& currentState, MainMenuItem& highlightedMenuItem) {
 	currentMenuAction = MenuAction::NONE;
 	currentFaithAction = FaithState::NONE;
 	MenuAction requestedMenuAction = MenuAction::NONE;
@@ -67,28 +89,28 @@ void InputHandler::Update(olc::PixelGameEngine* pge, GameState& currentState, Me
 		if (requestedMenuAction == MenuAction::UP) {
 			int previousItem = static_cast<int>(highlightedMenuItem) - 1;
 			if (previousItem < 0) {
-				previousItem = static_cast<int>(MenuItem::COUNT) - 1;
+				previousItem = static_cast<int>(MainMenuItem::COUNT) - 1;
 			}
-			highlightedMenuItem = static_cast<MenuItem>(previousItem);
+			highlightedMenuItem = static_cast<MainMenuItem>(previousItem);
 		}
 
 		if (requestedMenuAction == MenuAction::DOWN) {
 			int nextItem = static_cast<int>(highlightedMenuItem) + 1;
-			if (nextItem >= static_cast<int>(MenuItem::COUNT)) {
+			if (nextItem >= static_cast<int>(MainMenuItem::COUNT)) {
 				nextItem = 0;
 			}
-			highlightedMenuItem = static_cast<MenuItem>(nextItem);
+			highlightedMenuItem = static_cast<MainMenuItem>(nextItem);
 		}
 
 		if (requestedMenuAction == MenuAction::SELECT) {
 			switch (highlightedMenuItem) {
-			case MenuItem::START:
+			case MainMenuItem::START:
 				currentState = GameState::PLAYING;
 				break;
-			case MenuItem::CREDITS:
+			case MainMenuItem::CREDITS:
 				currentState = GameState::DISPLAY_CREDITS;
 				break;
-			case MenuItem::QUIT:
+			case MainMenuItem::QUIT:
 				currentState = GameState::QUITTING;
 				break;
 			default:
@@ -99,7 +121,11 @@ void InputHandler::Update(olc::PixelGameEngine* pge, GameState& currentState, Me
 	case GameState::PLAYING:
 		HandlePlayingInput(pge);
 		break;
+	case GameState::DISPLAY_CREDITS:
+		HandleCreditsInput(pge, currentState);
+		break;
 	case GameState::GAME_OVER:
+		HandleGameOverInput(pge, currentState);
 		break;
 	}
 }
@@ -162,6 +188,14 @@ bool InputHandler::DownPressed(olc::PixelGameEngine* pge) {
 
 bool InputHandler::SelectPressed(olc::PixelGameEngine* pge) {
 	if (pge->GetKey(olc::Key::ENTER).bPressed) {
+		return true;
+	}
+
+	return false;
+}
+
+bool InputHandler::EscapePressed(olc::PixelGameEngine* pge) {
+	if (pge->GetKey(olc::Key::ESCAPE).bPressed) {
 		return true;
 	}
 

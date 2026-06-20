@@ -29,9 +29,16 @@ enum class MenuAction {
 	SELECT
 };
 
-enum class MenuItem {
+enum class MainMenuItem {
 	START,
 	CREDITS,
 	QUIT,
 	COUNT
+};
+
+enum class RoundPhase {
+	INIT_ROUND,
+	PLAYBACK,
+	PLAYER_TURN,
+	ROUND_DELAY
 };

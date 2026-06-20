@@ -5,12 +5,17 @@
 
 class FaithRenderer {
 public:
+	//*********************************
+	//* Functions for loading sprites *
+	//*********************************
+	void LoadFaithSprites();
+	void LoadUISprites();
+	
 	//******************************************
 	//* Functions for rendering the main Faith *
 	//******************************************
 	FaithRenderer(FaithState initialState = FaithState::NONE);
 
-	void LoadFaithSprites();
 	void Update(float fElapsedTime);
 	void TriggerAnimation(FaithState newState, float duration = 0.5f);
 	void DrawFaith(olc::PixelGameEngine* pge);
@@ -18,10 +23,19 @@ public:
 	//**********************************
 	//* Functions for rendering the UI *
 	//**********************************
-	void LoadUISprites();
 	void DrawUI(olc::PixelGameEngine* pge);
-	void DrawMenu(olc::PixelGameEngine* pge, MenuItem highlightedMenuItem, float totalElapsedTime);
+	void DrawMenu(olc::PixelGameEngine* pge, MainMenuItem highlightedMenuItem, int highScore, float totalElapsedTime);
 	void DrawCreditsScreen(olc::PixelGameEngine* pge);
+	void DrawGameOverScreen(olc::PixelGameEngine* pge);
+	void DrawHighScore(olc::PixelGameEngine* pge, int highScore);
+	void DrawHighScoreMainMenu(olc::PixelGameEngine* pge, int highScore);
+	void DrawScore(olc::PixelGameEngine* pge, int currentScore);
+
+	//*********************************
+	//* Useful functions for everyone *
+	//*********************************
+	void DrawStringCentered(olc::PixelGameEngine* pge, int y, const std::string& text, olc::Pixel color = olc::WHITE, uint32_t scale = 1);
+	void Reset();
 
 private:
 	//*********************************************
@@ -53,11 +67,5 @@ private:
 	std::unique_ptr<olc::Sprite> uiInputUpPressed;
 	std::unique_ptr<olc::Sprite> uiInputDownPressed;
 	std::unique_ptr<olc::Sprite> uiMenuCursor;
-
-	//*****************************
-	//* Internal helper functions *
-	//*****************************
-
-	void DrawStringCentered(olc::PixelGameEngine* pge, int y, const std::string& text, olc::Pixel color = olc::WHITE, uint32_t scale = 1);
 };
 
