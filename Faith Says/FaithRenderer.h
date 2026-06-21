@@ -1,10 +1,12 @@
 #pragma once
 #include "olcPixelGameEngine.h"
+#include "olcSoundWaveEngine.h"
 #include "InputHandler.h"
 #include "Types.h"
 
 class FaithRenderer {
 public:
+	void InitAudio();
 	//*********************************
 	//* Functions for loading sprites *
 	//*********************************
@@ -67,5 +69,15 @@ private:
 	std::unique_ptr<olc::Sprite> uiInputUpPressed;
 	std::unique_ptr<olc::Sprite> uiInputDownPressed;
 	std::unique_ptr<olc::Sprite> uiMenuCursor;
+
+	//********************************
+	//* Variables for various sounds *
+	//********************************
+	olc::sound::WaveEngine audioEngine;
+
+	std::unique_ptr<olc::sound::Wave> soundMouthLeft;
+	std::unique_ptr<olc::sound::Wave> soundMouthRight;
+	std::unique_ptr<olc::sound::Wave> soundPawLeft;
+	std::unique_ptr<olc::sound::Wave> soundPawRight;
 };
 

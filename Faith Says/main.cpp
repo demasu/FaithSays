@@ -1,4 +1,5 @@
 #define OLC_PGE_APPLICATION
+#define OLC_SOUNDWAVE
 #include "olcPixelGameEngine.h"
 #include "FaithRenderer.h"
 #include "InputHandler.h"
@@ -52,6 +53,7 @@ public:
 		// Called once at the start, so create things here
 		renderer.LoadFaithSprites();
 		renderer.LoadUISprites();
+		renderer.InitAudio();
 		return true;
 	}
 

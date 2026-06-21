@@ -6,17 +6,54 @@ FaithRenderer::FaithRenderer(FaithState initialState) : currentState(initialStat
 
 void FaithRenderer::LoadFaithSprites() {
 	// Load sprites for Faith's face and actions
-	faithNeutral = std::make_unique<olc::Sprite>("faith_head.png");
-	faithMouthLeft = std::make_unique<olc::Sprite>("faith_head_left.png");
-	faithMouthRight = std::make_unique<olc::Sprite>("faith_head_right.png");
-	faithPawLeft = std::make_unique<olc::Sprite>("faith_paw_left.png");
-	faithPawRight = std::make_unique<olc::Sprite>("faith_paw_right.png");
+	faithNeutral = std::make_unique<olc::Sprite>("sprites/faith_head.png");
+	faithMouthLeft = std::make_unique<olc::Sprite>("sprites/faith_head_left.png");
+	faithMouthRight = std::make_unique<olc::Sprite>("sprites/faith_head_right.png");
+	faithPawLeft = std::make_unique<olc::Sprite>("sprites/faith_paw_left.png");
+	faithPawRight = std::make_unique<olc::Sprite>("sprites/faith_paw_right.png");
+}
+
+void FaithRenderer::LoadUISprites() {
+	uiInputLeft = std::make_unique<olc::Sprite>("sprites/button_mouth_left_new.png");
+	uiInputRight = std::make_unique<olc::Sprite>("sprites/button_mouth_right_new.png");
+	uiInputUp = std::make_unique<olc::Sprite>("sprites/button_paw_left_new.png");
+	uiInputDown = std::make_unique<olc::Sprite>("sprites/button_paw_right_new.png");
+	uiInputLeftPressed = std::make_unique<olc::Sprite>("sprites/button_mouth_left_new_pressed.png");
+	uiInputRightPressed = std::make_unique<olc::Sprite>("sprites/button_mouth_right_new_pressed.png");
+	uiInputUpPressed = std::make_unique<olc::Sprite>("sprites/button_paw_left_new_pressed.png");
+	uiInputDownPressed = std::make_unique<olc::Sprite>("sprites/button_paw_right_new_pressed.png");
+	uiMenuCursor = std::make_unique<olc::Sprite>("sprites/cursor.png");
+}
+
+void FaithRenderer::InitAudio() {
+	audioEngine.InitialiseAudio();
+
+	soundMouthLeft = std::make_unique<olc::sound::Wave>("sounds/meow_left.wav");
+	soundMouthRight = std::make_unique<olc::sound::Wave>("sounds/meow_right.wav");
+	soundPawLeft = std::make_unique<olc::sound::Wave>("sounds/paw_left.wav");
+	soundPawRight = std::make_unique<olc::sound::Wave>("sounds/paw_right.wav");
 }
 
 void FaithRenderer::TriggerAnimation(FaithState actionState, float duration) {
 	currentState = actionState;
 	animationTimer = 0.0f;
 	animationDuration = duration;
+
+	// Audio time!
+	switch (currentState) {
+	case FaithState::MOUTH_LEFT:
+		audioEngine.PlayWaveform(soundMouthLeft.get());
+		break;
+	case FaithState::MOUTH_RIGHT:
+		audioEngine.PlayWaveform(soundMouthRight.get());
+		break;
+	case FaithState::PAW_LEFT:
+		audioEngine.PlayWaveform(soundPawLeft.get());
+		break;
+	case FaithState::PAW_RIGHT:
+		audioEngine.PlayWaveform(soundPawRight.get());
+		break;
+	}
 }
 
 void FaithRenderer::Update(float fElapsedTime) {
@@ -71,18 +108,6 @@ void FaithRenderer::DrawFaith(olc::PixelGameEngine* pge)
 	default:
 		break;
 	}
-}
-
-void FaithRenderer::LoadUISprites() {
-	uiInputLeft = std::make_unique<olc::Sprite>("button_mouth_left_new.png");
-	uiInputRight = std::make_unique<olc::Sprite>("button_mouth_right_new.png");
-	uiInputUp = std::make_unique<olc::Sprite>("button_paw_left_new.png");
-	uiInputDown = std::make_unique<olc::Sprite>("button_paw_right_new.png");
-	uiInputLeftPressed = std::make_unique<olc::Sprite>("button_mouth_left_new_pressed.png");
-	uiInputRightPressed = std::make_unique<olc::Sprite>("button_mouth_right_new_pressed.png");
-	uiInputUpPressed = std::make_unique<olc::Sprite>("button_paw_left_new_pressed.png");
-	uiInputDownPressed = std::make_unique<olc::Sprite>("button_paw_right_new_pressed.png");
-	uiMenuCursor = std::make_unique<olc::Sprite>("cursor.png");
 }
 
 void FaithRenderer::DrawUI(olc::PixelGameEngine* pge)

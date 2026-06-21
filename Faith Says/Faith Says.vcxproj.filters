@@ -27,6 +27,9 @@
     <ClInclude Include="Types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="olcSoundWaveEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -40,6 +43,33 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="sprites\button_mouth_left_new.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="sprites\button_mouth_left_new_pressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="sprites\button_mouth_right_new.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="sprites\button_mouth_right_new_pressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="sprites\button_paw_left_new.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="sprites\button_paw_left_new_pressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="sprites\button_paw_right_new.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="sprites\button_paw_right_new_pressed.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="sprites\cursor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
     <Image Include="sprites\faith_head.png">
       <Filter>Resource Files</Filter>
     </Image>
@@ -55,32 +85,19 @@
     <Image Include="sprites\faith_paw_right.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="cursor.png">
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sounds\paw_left.wav">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="button_mouth_left_new.png">
+    </Media>
+    <Media Include="sounds\paw_right.wav">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="button_mouth_left_new_pressed.png">
+    </Media>
+    <Media Include="sounds\meow_left.wav">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="button_mouth_right_new.png">
+    </Media>
+    <Media Include="sounds\meow_right.wav">
       <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="button_mouth_right_new_pressed.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="button_paw_left_new.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="button_paw_left_new_pressed.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="button_paw_right_new.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="button_paw_right_new_pressed.png">
-      <Filter>Resource Files</Filter>
-    </Image>
+    </Media>
   </ItemGroup>
 </Project>
