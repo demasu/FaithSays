@@ -18,13 +18,14 @@ Faith will show off her moves and you need to follow them! Faith has four action
 Remember the order that Faith shows you, and when she's done, repeat those to show her you've been paying attention! See how far you can go before messing up!
 
 ## Controls
-
+```
 Up arrow/W    - Walk Left
 Down arrow/S  - Walk Right
 Left arrow/A  - Meow Left
 Right arrow/D - Meow Right
 Enter         - Select
 Escape        - Go to the main menu
+```
 
 ## Running
 
